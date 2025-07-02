@@ -67,7 +67,7 @@ f_blog/
 - **Web框架**: Gin
 - **数据库**: MySQL 8.0+
 - **ORM**: GORM
-- **缓存**: Redis
+- **缓存**: Redis //暂未使用
 - **认证**: JWT
 
 ### 前端
