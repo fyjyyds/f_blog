@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间格式化测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
+        .input { color: #666; }
+        .output { color: #333; font-weight: bold; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>时间格式化函数测试</h1>
+    <div id="results"></div>
+
+    <script>
+        // 复制时间格式化函数
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            
+            try {
+                const date = new Date(dateStr);
+                // 检查是否为有效日期
+                if (isNaN(date.getTime())) {
+                    return '-';
+                }
+                
+                // 格式化日期
+                const now = new Date();
+                const diff = now.getTime() - date.getTime();
+                const oneDay = 24 * 60 * 60 * 1000;
+                
+                if (diff < oneDay) {
+                    // 今天内
+                    return date.toLocaleTimeString('zh-CN', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                } else if (diff < 7 * oneDay) {
+                    // 一周内
+                    const days = Math.floor(diff / oneDay);
+                    return `${days}天前`;
+                } else {
+                    // 超过一周
+                    return date.toLocaleDateString('zh-CN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+            } catch (error) {
+                console.error('Date formatting error:', error);
+                return '-';
+            }
+        }
+
+        // 测试用例
+        const testCases = [
+            // 正常时间格式
+            '2024-01-15T10:30:00Z',
+            '2024-01-15 10:30:00',
+            '2024-01-15',
+            new Date().toISOString(), // 当前时间
+            new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2天前
+            new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10天前
+            
+            // 边界情况
+            '',
+            null,
+            undefined,
+            'invalid-date',
+            '2024-13-45', // 无效日期
+            'not-a-date',
+            '2024-01-15T25:70:99Z' // 无效时间
+        ];
+
+        // 运行测试
+        const resultsDiv = document.getElementById('results');
+        
+        testCases.forEach((testCase, index) => {
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test-case';
+            
+            const input = document.createElement('div');
+            input.className = 'input';
+            input.textContent = `输入 ${index + 1}: ${testCase}`;
+            
+            const output = document.createElement('div');
+            output.className = 'output';
+            const result = formatDate(testCase);
+            output.textContent = `输出: ${result}`;
+            
+            if (result === '-') {
+                output.className += ' error';
+            }
+            
+            testDiv.appendChild(input);
+            testDiv.appendChild(output);
+            resultsDiv.appendChild(testDiv);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,3 @@
+学到 P30，这是目前为止俺的两篇笔记，内容顺序和老师的讲课基本一致，方便大家复习[妙啊][妙啊]
+【Golang 快速入门】基础语法 + 面向对象：https://luzhenyu.blog.csdn.net/article/details/122803041
+【Golang 快速入门】高级语法：反射 + 并发：https://luzhenyu.blog.csdn.net/article/details/122816289
