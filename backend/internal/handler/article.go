@@ -150,7 +150,7 @@ func ListArticles(c *gin.Context) {
 	var articles []model.Article
 
 	// 1. 先构造基础筛选条件
-	baseDB := database.DB.Where("status = ?", "published")
+	baseDB := database.DB.Model(&model.Article{}).Where("status = ?", "published")
 
 	if categoryID := c.Query("category_id"); categoryID != "" {
 		baseDB = baseDB.Where("category_id = ?", categoryID)
@@ -165,22 +165,22 @@ func ListArticles(c *gin.Context) {
 		baseDB = baseDB.Where("created_at <= ?", endTime)
 	}
 
-	// 2. 统计总数
-	var total int64
-	baseDB.Model(&model.Article{}).Count(&total)
-
-	// 3. 再基于baseDB做分页、排序、预加载、Join等
-	db := baseDB
-
 	// 标签筛选（支持多个标签）
 	if tagIDs := c.Query("tag_ids"); tagIDs != "" {
 		ids := strings.Split(tagIDs, ",")
-		db = db.Joins("JOIN article_tags at ON at.article_id = articles.id").
+		baseDB = baseDB.Joins("JOIN article_tags at ON at.article_id = articles.id").
 			Where("at.tag_id IN ?", ids)
 	} else if tagID := c.Query("tag_id"); tagID != "" {
-		db = db.Joins("JOIN article_tags at ON at.article_id = articles.id").
+		baseDB = baseDB.Joins("JOIN article_tags at ON at.article_id = articles.id").
 			Where("at.tag_id = ?", tagID)
 	}
+
+	// 2. 统计总数（此时 baseDB 已包含所有筛选条件）
+	var total int64
+	baseDB.Count(&total)
+
+	// 3. 再基于baseDB做分页、排序、预加载、Join等
+	db := baseDB
 
 	// 排序
 	sort := c.DefaultQuery("sort", "new")

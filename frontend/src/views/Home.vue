@@ -14,7 +14,7 @@
               <div class="filter-controls">
                 <div class="filter-group">
                   <label class="filter-label">分类</label>
-                  <select v-model="categoryId" class="filter-select" @change="fetchArticles">
+                  <select v-model="categoryId" class="filter-select" @change="() => fetchArticles()">
                     <option value="">全部分类</option>
                     <option v-for="cat in categories" :key="cat.id" :value="cat.id">
                       {{ cat.name }}
@@ -67,7 +67,26 @@
           <!-- 文章列表 -->
           <div class="articles-section">
             <div class="articles-header">
-              <h2 class="articles-title">📚 文章列表 ({{ total }})</h2>
+              <h2 class="articles-title">
+                📚 文章列表 
+                <span v-if="hasFilters" class="filter-indicator">
+                  (筛选结果: {{ total }})
+                </span>
+                <span v-else>
+                  (共 {{ total }} 篇)
+                </span>
+              </h2>
+              <div v-if="hasFilters" class="filter-summary">
+                <span class="filter-item" v-if="categoryId">
+                  📂 {{ getCategoryName(categoryId) }}
+                </span>
+                <span class="filter-item" v-if="tagIds.length > 0">
+                  🏷️ {{ getTagNames(tagIds).join(', ') }}
+                </span>
+                <span class="filter-item" v-if="sortType !== 'new'">
+                  🔄 {{ getSortName(sortType) }}
+                </span>
+              </div>
             </div>
             <div class="articles-grid">
               <div 
@@ -156,6 +175,11 @@ const categories = ref<any[]>([]);
 const categoryId = ref('');
 const tags = ref<any[]>([]);
 const tagIds = ref<any[]>([]);
+
+// 检测是否有筛选条件
+const hasFilters = computed(() => {
+  return categoryId.value || tagIds.value.length > 0 || sortType.value !== 'new';
+});
 
 // 点赞相关
 const articleLiked = ref<Record<number, boolean>>({});
@@ -295,6 +319,30 @@ function formatDate(dateString: string) {
     month: 'short',
     day: 'numeric'
   });
+}
+
+// 获取分类名称
+function getCategoryName(categoryId: string) {
+  const category = categories.value.find(cat => cat.id.toString() === categoryId);
+  return category ? category.name : '未知分类';
+}
+
+// 获取标签名称列表
+function getTagNames(tagIds: number[]) {
+  return tagIds.map(id => {
+    const tag = tags.value.find(tag => tag.id === id);
+    return tag ? tag.name : '未知标签';
+  });
+}
+
+// 获取排序方式名称
+function getSortName(sortType: string) {
+  const sortNames: Record<string, string> = {
+    'new': '最新',
+    'hot': '最热',
+    'comment': '评论最多'
+  };
+  return sortNames[sortType] || '最新';
 }
 </script>
 
@@ -473,6 +521,31 @@ function formatDate(dateString: string) {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.filter-indicator {
+  color: #667eea;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.filter-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 0 8px;
+}
+
+.filter-item {
+  background: rgba(102, 126, 234, 0.2);
+  color: #667eea;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .articles-grid {

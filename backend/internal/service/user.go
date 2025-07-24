@@ -5,12 +5,10 @@ import (
 	"encoding/hex"
 	"errors"
 	"f_blog/backend/internal/config"
-	"f_blog/backend/internal/database"
 	"f_blog/backend/internal/model"
 	"log"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -96,21 +94,6 @@ func LoginUser(db *gorm.DB, usernameOrEmail, password string) (string, *model.Us
 		return "", nil, err
 	}
 	return tokenString, &user, nil
-}
-
-func ActivateEmail(c *gin.Context) {
-	token := c.Query("token")
-	var user model.User
-	if err := database.DB.Where("email_verify_token = ? AND email_verify_expire > ?", token, time.Now()).First(&user).Error; err != nil {
-		c.JSON(400, gin.H{"error": "激活链接无效或已过期"})
-		return
-	}
-	user.Status = "active"
-	user.EmailVerified = true
-	user.EmailVerifyToken = ""
-	user.EmailVerifyExpire = nil
-	database.DB.Save(&user)
-	c.JSON(200, gin.H{"message": "激活成功，请登录"})
 }
 
 // 密码加密
