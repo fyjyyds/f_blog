@@ -21,8 +21,10 @@ f_blog/
 │   ├── api.md             # API文档
 │   └── database.md        # 数据库设计文档
 └── README.md              # 项目说明
+├── frontend/              #前端说明
+    ├── app.vue            #懒得写了
 ```
-
+如需完成邮件验证，在.env邮件中配置自己的smtp
 ## 功能特性
 
 ### 用户管理
@@ -65,10 +67,10 @@ f_blog/
 - **Web框架**: Gin
 - **数据库**: MySQL 8.0+
 - **ORM**: GORM
-- **缓存**: Redis
+- **缓存**: Redis //暂未使用
 - **认证**: JWT
 
-### 前端 (计划中)
+### 前端
 - **框架**: Vue.js 3 + TypeScript
 - **UI组件库**: Element Plus
 - **构建工具**: Vite
