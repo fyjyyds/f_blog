@@ -7,10 +7,11 @@
         <el-button size="small" @click="handleMarkAllRead" :disabled="!unreadCount">全部标为已读</el-button>
       </div>
       <el-empty v-if="notifications.length === 0" description="暂无通知" />
-      <el-list v-else>
-        <el-list-item
+      <div v-else class="notification-list">
+        <div
           v-for="item in notifications"
           :key="item.id"
+          class="notification-item"
           :class="{ unread: !item.is_read }"
           @click="openDetail(item)"
         >
@@ -23,18 +24,18 @@
             <span class="date">{{ formatDate(item.created_at) }}</span>
             <el-button
               v-if="!item.is_read"
-              size="mini"
+              size="small"
               type="primary"
               @click.stop="markRead(item)"
             >标为已读</el-button>
             <el-button
-              size="mini"
+              size="small"
               type="danger"
               @click.stop="deleteOne(item)"
             >删除</el-button>
           </div>
-        </el-list-item>
-      </el-list>
+        </div>
+      </div>
     </div>
     <el-dialog v-model="showDetail" title="通知详情" width="400px">
       <div v-if="current">
@@ -153,5 +154,23 @@ onMounted(fetchList);
 .date { color: #999; font-size: 12px; margin-right: 8px; }
 .back-btn {
   margin-right: 12px;
+}
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: 1px solid #eee;
+}
+.notification-item:hover {
+  background: #f5f7fa;
 }
 </style> 

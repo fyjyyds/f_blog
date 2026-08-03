@@ -1,19 +1,16 @@
 <template>
   <div class="popular-articles-section">
     <div class="section-header">
-      <h3 class="section-title">
-        <span class="title-icon">🔥</span>
-        热门文章
-      </h3>
-      <div class="update-info">
-        <span class="update-text">每日更新</span>
-        <span class="update-time" v-if="lastUpdate">{{ lastUpdate }}</span>
+      <h3 class="section-title">🔥 热门文章</h3>
+      <div class="update-info" v-if="lastUpdate">
+        <span class="update-text">最近更新</span>
+        <span class="update-time">{{ formatDate(lastUpdate) }}</span>
       </div>
     </div>
-    
-    <div class="articles-container" v-if="articles.length > 0">
-      <div 
-        v-for="(article, index) in articles" 
+
+    <div v-if="articles.length > 0" class="articles-container">
+      <div
+        v-for="(article, index) in articles"
         :key="article.id"
         class="article-item"
         @click="goToArticle(article.id)"
@@ -21,15 +18,14 @@
         <div class="rank-badge" :class="getRankClass(index)">
           {{ index + 1 }}
         </div>
-        
+
         <div class="article-content">
           <h4 class="article-title">{{ article.title }}</h4>
           <div class="article-meta">
-            <span class="author">{{ article.author?.nickname || article.author?.username }}</span>
-            <span class="divider">•</span>
+            <span class="author">{{ article.author?.nickname || article.author?.username || '匿名' }}</span>
+            <span class="divider">·</span>
             <span class="date">{{ formatDate(article.created_at) }}</span>
           </div>
-          
           <div class="article-stats">
             <div class="stat-item">
               <span class="stat-icon">👁️</span>
@@ -48,13 +44,13 @@
               <span class="stat-value">{{ calculatePopularityScore(article) }}</span>
             </div>
           </div>
-          
+
           <div class="article-tags" v-if="article.tags && article.tags.length">
-            <span 
-              v-for="tag in article.tags.slice(0, 2)" 
+            <span
+              v-for="tag in article.tags.slice(0, 2)"
               :key="tag.id"
               class="tag"
-              :style="{ backgroundColor: tag.color || '#667eea' }"
+              :style="{ backgroundColor: tag.color || '#5b6abf' }"
             >
               {{ tag.name }}
             </span>
@@ -65,15 +61,14 @@
         </div>
       </div>
     </div>
-    
+
     <div v-else-if="loading" class="loading-state">
       <div class="loading-spinner"></div>
       <p class="loading-text">加载热门文章...</p>
     </div>
-    
+
     <div v-else class="empty-state">
-      <div class="empty-icon">📝</div>
-      <p class="empty-text">暂无热门文章</p>
+      <p>暂无热门文章</p>
     </div>
   </div>
 </template>
@@ -90,11 +85,10 @@ const articles = ref<any[]>([]);
 const loading = ref(false);
 const lastUpdate = ref('');
 
-// 获取热门文章
 const fetchPopularArticles = async () => {
   loading.value = true;
   try {
-    const response = await getPopularArticles(8); // 获取8篇热门文章
+    const response = await getPopularArticles(8);
     articles.value = response.data.data;
     lastUpdate.value = response.data.updated_at;
   } catch (error: any) {
@@ -104,23 +98,17 @@ const fetchPopularArticles = async () => {
   }
 };
 
-// 计算热度分数
 const calculatePopularityScore = (article: any) => {
-  const viewScore = (article.view_count || 0) * 1;
-  const likeScore = (article.like_count || 0) * 3;
-  const commentScore = (article.comment_count || 0) * 2;
-  return viewScore + likeScore + commentScore;
+  return (article.view_count || 0) * 1 + (article.like_count || 0) * 3 + (article.comment_count || 0) * 2;
 };
 
-// 获取排名样式
 const getRankClass = (index: number) => {
   if (index === 0) return 'rank-gold';
   if (index === 1) return 'rank-silver';
   if (index === 2) return 'rank-bronze';
-  return 'rank-normal';
+  return '';
 };
 
-// 跳转到文章详情
 const goToArticle = (id: number) => {
   router.push(`/article/${id}`);
 };
@@ -132,124 +120,79 @@ onMounted(() => {
 
 <style scoped>
 .popular-articles-section {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 24px;
-  backdrop-filter: blur(20px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 20px;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .section-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a2e;
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.title-icon {
-  font-size: 24px;
-}
-
-.update-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
 }
 
 .update-text {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.update-time {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #9ca3af;
 }
 
 .articles-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .article-item {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.article-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: background 0.15s;
 }
 
 .article-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-.article-item:hover::before {
-  opacity: 1;
+  background: #f9fafb;
 }
 
 .rank-badge {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 14px;
-  color: white;
+  font-size: 13px;
   flex-shrink: 0;
+  background: #f3f4f6;
+  color: #6b7280;
 }
 
 .rank-gold {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: #333;
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .rank-silver {
-  background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
-  color: #333;
+  background: #e5e7eb;
+  color: #374151;
 }
 
 .rank-bronze {
-  background: linear-gradient(135deg, #cd7f32, #daa520);
-  color: white;
-}
-
-.rank-normal {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: #fed7aa;
+  color: #9a3412;
 }
 
 .article-content {
@@ -258,10 +201,10 @@ onMounted(() => {
 }
 
 .article-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
-  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a2e;
+  margin: 0 0 6px 0;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -273,85 +216,66 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   font-size: 12px;
+  color: #9ca3af;
 }
 
 .author {
-  color: #667eea;
-  font-weight: 500;
-}
-
-.divider {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.date {
-  color: rgba(255, 255, 255, 0.5);
+  color: #5b6abf;
 }
 
 .article-stats {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
+  gap: 12px;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.stat-icon {
-  font-size: 14px;
-}
-
-.stat-value {
-  font-weight: 600;
+  color: #9ca3af;
 }
 
 .popularity-score {
-  color: #ffd700;
-  font-weight: 700;
+  color: #f59e0b;
 }
 
 .article-tags {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-wrap: wrap;
+  margin-top: 8px;
 }
 
 .tag {
   padding: 2px 8px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 10px;
-  font-weight: 500;
-  color: white;
-  background: rgba(102, 126, 234, 0.2);
+  color: #fff;
 }
 
 .more-tags {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #9ca3af;
 }
 
 .loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px;
-  gap: 16px;
+  padding: 32px 20px;
+  gap: 12px;
 }
 
 .loading-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top: 3px solid #667eea;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #5b6abf;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -362,58 +286,15 @@ onMounted(() => {
 }
 
 .loading-text {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 14px;
+  color: #9ca3af;
+  font-size: 13px;
   margin: 0;
 }
 
 .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
-  gap: 12px;
+  text-align: center;
+  padding: 32px 20px;
+  color: #9ca3af;
+  font-size: 13px;
 }
-
-.empty-icon {
-  font-size: 32px;
-  opacity: 0.5;
-}
-
-.empty-text {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 14px;
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .popular-articles-section {
-    padding: 16px;
-  }
-  
-  .section-header {
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
-  }
-  
-  .article-item {
-    padding: 12px;
-    gap: 12px;
-  }
-  
-  .article-stats {
-    gap: 12px;
-  }
-  
-  .rank-badge {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-  }
-  
-  .article-title {
-    font-size: 14px;
-  }
-}
-</style> 
+</style>

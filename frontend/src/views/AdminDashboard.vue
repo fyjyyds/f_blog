@@ -219,10 +219,10 @@ const fetchStats = async () => {
     });
     
     const data = response.data;
-    stats.value[0].value = data.totalArticles || '0';
-    stats.value[1].value = data.totalUsers || '0';
-    stats.value[2].value = data.totalComments || '0';
-    stats.value[3].value = data.todayVisits || '0';
+    stats.value[0].value = data.article_count || 0;
+    stats.value[1].value = data.user_count || 0;
+    stats.value[2].value = data.comment_count || 0;
+    stats.value[3].value = data.pending_article_count || 0;
   } catch (error) {
     console.error('获取统计数据失败:', error);
   }
@@ -234,7 +234,19 @@ const fetchRecentActivities = async () => {
     const response = await request.get('/api/v1/admin/activities', {
       headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
     });
-    recentActivities.value = response.data || recentActivities.value;
+    const data = response.data;
+    const activities: any[] = [];
+    if (data.recent_articles) {
+      data.recent_articles.forEach((a: any) => {
+        activities.push({ type: 'article', title: a.title, time: a.created_at, id: a.id });
+      });
+    }
+    if (data.recent_comments) {
+      data.recent_comments.forEach((c: any) => {
+        activities.push({ type: 'comment', title: c.content?.substring(0, 50), time: c.created_at, id: c.id });
+      });
+    }
+    recentActivities.value = activities;
   } catch (error) {
     console.error('获取最近活动失败:', error);
   }

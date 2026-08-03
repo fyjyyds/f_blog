@@ -173,34 +173,31 @@ async function onFileChange(e: Event) {
 <style scoped>
 .create-article-page {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--background);
+  background: #f5f6fa;
 }
 .create-article-card {
   width: 100%;
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 40px 32px;
-  border-radius: var(--border-radius);
-  background: var(--card-bg);
-  box-shadow: var(--shadow);
-  backdrop-filter: var(--card-blur);
+  max-width: 700px;
+  margin: 24px auto;
+  padding: 28px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
   position: relative;
 }
 .form-title {
   text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 32px;
-  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1a1a2e;
 }
 .form-group label {
-  color: #bfcfff;
+  color: #374151;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   display: block;
+  font-size: 14px;
 }
 .form-group {
   margin-bottom: 24px;

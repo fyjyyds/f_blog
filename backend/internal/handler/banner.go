@@ -1,16 +1,17 @@
 package handler
 
 import (
+	"f_blog/backend/internal/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func ListBanners(c *gin.Context) {
-	banners := []string{
-		"/static/banners/banner1.jpg",
-		"/static/banners/banner2.jpg",
-		"/static/banners/banner3.jpg",
+	banners, err := service.App.Banner.ListActive()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "查询失败"})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"banners": banners})
 }

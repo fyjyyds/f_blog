@@ -20,9 +20,17 @@ type JWTConfig struct {
 	ExpireTime string
 }
 
+type RedisConfig struct {
+	Host     string
+	Port     int
+	Password string
+	DB       int
+}
+
 type Config struct {
 	Database DatabaseConfig
 	JWT      JWTConfig
+	Redis    RedisConfig
 }
 
 type EmailConfig struct {
@@ -47,6 +55,12 @@ func Load() *Config {
 		JWT: JWTConfig{
 			Secret:     getEnv("JWT_SECRET", "your-secret-key"),
 			ExpireTime: getEnv("JWT_EXPIRE_TIME", "24h"),
+		},
+		Redis: RedisConfig{
+			Host:     getEnv("REDIS_HOST", "localhost"),
+			Port:     getIntEnv("REDIS_PORT", 6379),
+			Password: getEnv("REDIS_PASSWORD", ""),
+			DB:       getIntEnv("REDIS_DB", 0),
 		},
 	}
 }

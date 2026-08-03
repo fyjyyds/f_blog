@@ -609,7 +609,7 @@ onMounted(() => {
 <style scoped>
 .admin-articles {
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f5f6fa;
   min-height: 100vh;
 }
 
@@ -673,13 +673,12 @@ onMounted(() => {
 }
 
 .filter-select {
-  padding: 10px 15px;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
-  background: rgb(37, 35, 35);
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .filter-select:focus {
@@ -1063,11 +1062,10 @@ onMounted(() => {
 .form-select {
   width: 100%;
   padding: 12px;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
   font-size: 14px;
-  transition: all 0.3s ease;
-  background: rgb(37, 36, 36);
+  background: #fff;
 }
 
 .form-input:focus,

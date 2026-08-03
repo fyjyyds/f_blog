@@ -11,8 +11,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// 加载环境变量
 func main() {
-	// 加载环境变量
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Warning: Error loading .env file: %v", err)
 	}

@@ -32,25 +32,29 @@ request.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      // 服务器返回错误状态码
       const { status, data } = error.response;
-      
+
       switch (status) {
-        case 401:
-          // 未授权，清除token并跳转到登录页
-          localStorage.removeItem('token');
-          ElMessage.error('登录已过期，请重新登录');
-          // 可以在这里跳转到登录页
+        case 401: {
+          const token = localStorage.getItem('token');
+          if (token) {
+            // 有 token 但过期了，提示重新登录
+            localStorage.removeItem('token');
+            ElMessage.error('登录已过期，请重新登录');
+            setTimeout(() => {
+              window.location.href = '/login';
+            }, 1500);
+          }
+          // 没有 token（未登录），静默忽略，不弹错误
           break;
+        }
         case 403:
-          // 只在后台页面弹窗
           if (window.location.pathname.startsWith('/admin')) {
             ElMessage.error('没有权限访问');
           }
-          // 其他页面静默处理
           break;
         case 404:
-          ElMessage.error('请求的资源不存在');
+          // 404 静默处理，不弹错误
           break;
         case 500:
           ElMessage.error('服务器内部错误');
@@ -59,10 +63,8 @@ request.interceptors.response.use(
           ElMessage.error(data?.error || '请求失败');
       }
     } else if (error.request) {
-      // 请求已发出但没有收到响应
       ElMessage.error('网络连接失败，请检查网络');
     } else {
-      // 其他错误
       ElMessage.error('请求配置错误');
     }
     return Promise.reject(error);

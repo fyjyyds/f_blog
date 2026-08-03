@@ -14,6 +14,6 @@ type Comment struct {
 	ReplyToUser string    `json:"reply_to_user"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
-	User        User      `gorm:"foreignKey:UserID" json:"user"`
-	Article     Article   `gorm:"foreignKey:ArticleID" json:"article"`
+	User        User      `gorm:"foreignKey:UserID" json:"user,omitempty"`
+	Article     Article   `gorm:"foreignKey:ArticleID" json:"article,omitempty"`
 }

@@ -323,18 +323,15 @@
   
   <style scoped>
   .comment-item {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-    transition: all 0.3s ease;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.15s;
   }
-  
   .comment-item:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
   
   .comment-header {
@@ -351,16 +348,16 @@
   }
   
   .author-avatar {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #5b6abf;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    color: white;
-    font-size: 16px;
+    color: #fff;
+    font-size: 14px;
   }
   
   .child-avatar {
@@ -380,13 +377,12 @@
   }
   
   .author-name {
-    color: #667eea;
+    color: #5b6abf;
     font-weight: 600;
     font-size: 14px;
   }
-  
   .comment-date {
-    color: rgba(255, 255, 255, 0.5);
+    color: #9ca3af;
     font-size: 12px;
   }
   
@@ -399,20 +395,17 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 6px 12px;
-    color: white;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 5px 10px;
+    color: #6b7280;
     font-size: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    transition: all 0.15s;
   }
-  
   .action-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
+    background: #e5e7eb;
   }
   
   .delete-btn:hover {
@@ -430,10 +423,10 @@
   }
   
   .comment-content {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 15px;
+    color: #1f2937;
+    font-size: 14px;
     line-height: 1.6;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   
   .comment-footer {
@@ -446,26 +439,23 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 6px 12px;
-    color: white;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 5px 10px;
+    color: #6b7280;
     font-size: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    transition: all 0.15s;
   }
-  
   .like-btn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
+    border-color: #f87171;
+    color: #f87171;
   }
-  
   .like-btn.liked {
-    background: rgba(255, 107, 107, 0.2);
-    border-color: #ff6b6b;
-    color: #ff6b6b;
+    background: #fef2f2;
+    border-color: #f87171;
+    color: #ef4444;
   }
   
   .like-btn.liked:hover:not(:disabled) {
@@ -486,7 +476,7 @@
   }
   
   .like-count {
-    background: rgba(255, 255, 255, 0.2);
+    background: #f3f4f6;
     border-radius: 4px;
     padding: 2px 6px;
     font-size: 11px;
@@ -501,11 +491,11 @@
   }
   
   .reply-box {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 16px;
-    margin-top: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 10px;
   }
   
   .reply-to-tip {
@@ -517,28 +507,23 @@
   
   .reply-textarea {
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 12px;
-    color: white;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 10px;
+    color: #1f2937;
     font-size: 14px;
     font-family: inherit;
     resize: vertical;
     min-height: 60px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
   }
-  
   .reply-textarea:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
-    background: rgba(255, 255, 255, 0.15);
+    border-color: #5b6abf;
+    box-shadow: 0 0 0 3px rgba(91,106,191,0.1);
   }
-  
   .reply-textarea::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: #9ca3af;
   }
   
   .reply-actions {
@@ -549,61 +534,50 @@
   }
   
   .reply-submit-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #5b6abf;
     border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    color: white;
+    border-radius: 6px;
+    padding: 7px 14px;
+    color: #fff;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
   }
-  
   .reply-submit-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    background: #4a59ae;
   }
-  
   .reply-submit-btn:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
   }
-  
   .reply-cancel-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 8px 16px;
-    color: white;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 7px 14px;
+    color: #6b7280;
     font-size: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
   }
-  
   .reply-cancel-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #e5e7eb;
   }
   
   .children {
     margin-left: 20px;
-    margin-top: 16px;
-    padding-left: 20px;
-    border-left: 2px solid rgba(102, 126, 234, 0.3);
+    margin-top: 12px;
+    padding-left: 16px;
+    border-left: 2px solid #e5e7eb;
   }
-  
   .child-comment {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-    transition: all 0.3s ease;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
   }
-  
   .child-comment:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: #f3f4f6;
   }
   
   .expand-btn {

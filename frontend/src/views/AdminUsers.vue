@@ -206,7 +206,7 @@ const fetchUsers = async () => {
     });
     
     users.value = response.data.users || [];
-    totalPages.value = response.data.totalPages || 1;
+    totalPages.value = response.data.total_pages || 1;
   } catch (error: any) {
     ElMessage.error(error?.response?.data?.error || '获取用户列表失败');
   }

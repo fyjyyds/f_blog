@@ -7,7 +7,7 @@ import (
 type Notification struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	UserID    uint      `json:"user_id"`
-	Type      string    `gorm:"type:enum('comment','like','follow','system','review')" json:"type"`
+	Type      string    `gorm:"type:varchar(32)" json:"type"`
 	Title     string    `gorm:"type:varchar(100)" json:"title"`
 	Content   string    `json:"content"`
 	Data      string    `json:"data"`

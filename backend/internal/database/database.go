@@ -49,6 +49,7 @@ func Init(cfg *config.DatabaseConfig) error {
 		&model.Banner{},
 		&model.ArticleTag{},
 		&model.Setting{},
+		&model.Notification{},
 	); err != nil {
 		// 检查是否是约束删除错误，如果是则忽略
 		if strings.Contains(err.Error(), "Can't DROP") && strings.Contains(err.Error(), "check that column/key exists") {

@@ -1,5 +1,5 @@
-import axios from 'axios';
+import request from './request';
 
 export function getBanners() {
-  return axios.get('/api/v1/banners');
+  return request.get('/api/v1/banners');
 }

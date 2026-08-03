@@ -1,10 +1,10 @@
 <template>
   <div class="banner-container">
     <div class="banner-carousel">
-      <div 
-        class="banner-slide"
-        v-for="(banner, idx) in banners" 
+      <div
+        v-for="(banner, idx) in banners"
         :key="idx"
+        class="banner-slide"
         :class="{ active: currentIndex === idx }"
         :style="{ backgroundImage: `url(${getFullUrl(banner)})` }"
       >
@@ -15,29 +15,30 @@
           </div>
         </div>
       </div>
-      
-      <div class="banner-indicators">
-        <button 
-          v-for="(banner, idx) in banners" 
-          :key="idx"
-          class="indicator"
-          :class="{ active: currentIndex === idx }"
-          @click="setCurrentIndex(idx)"
-        ></button>
-      </div>
+    </div>
+    <div class="banner-indicators" v-if="banners.length > 1">
+      <div
+        v-for="(banner, idx) in banners"
+        :key="idx"
+        class="indicator"
+        :class="{ active: currentIndex === idx }"
+        @click="setCurrentIndex(idx)"
+      ></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { getBanners } from '../api/banner';
 
-const banners = ref<string[]>([]);
+const banners = ref<any[]>([]);
 const currentIndex = ref(0);
 const backendBaseUrl = 'http://localhost:8080';
 
-function getFullUrl(path: string) {
+function getFullUrl(banner: any) {
+  const path = banner?.image || banner;
+  if (!path) return '';
   if (path.startsWith('http')) return path;
   return backendBaseUrl + path;
 }
@@ -46,6 +47,8 @@ function setCurrentIndex(index: number) {
   currentIndex.value = index;
 }
 
+let timer: number;
+
 onMounted(async () => {
   try {
     const res = await getBanners();
@@ -53,25 +56,32 @@ onMounted(async () => {
   } catch (error) {
     console.error('获取轮播图失败:', error);
   }
+  timer = window.setInterval(() => {
+    if (banners.value.length > 1) {
+      currentIndex.value = (currentIndex.value + 1) % banners.value.length;
+    }
+  }, 5000);
+});
+
+onUnmounted(() => {
+  clearInterval(timer);
 });
 </script>
 
 <style scoped>
 .banner-container {
   width: 100%;
-  height: 300px;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .banner-carousel {
   width: 100%;
-  height: 100%;
+  height: 280px;
   position: relative;
   overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
 }
 
 .banner-slide {
@@ -82,15 +92,12 @@ onMounted(async () => {
   height: 100%;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
   opacity: 0;
-  transition: opacity 0.8s ease-in-out;
-  transform: scale(1.1);
+  transition: opacity 0.6s ease;
 }
 
 .banner-slide.active {
   opacity: 1;
-  transform: scale(1);
 }
 
 .banner-overlay {
@@ -99,12 +106,7 @@ onMounted(async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 50%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
+  background: linear-gradient(135deg, rgba(0,0,0,0.35), rgba(0,0,0,0.15));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,78 +114,51 @@ onMounted(async () => {
 
 .banner-content {
   text-align: center;
-  color: white;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
 .banner-title {
-  font-size: 36px;
-  font-weight: 800;
-  margin: 0 0 12px 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .banner-subtitle {
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 400;
+  opacity: 0.9;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 .banner-indicators {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
-  gap: 12px;
-  z-index: 10;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  background: transparent;
+  background: #d1d5db;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.indicator:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s;
 }
 
 .indicator.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-color: #667eea;
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  background: #5b6abf;
+  width: 20px;
+  border-radius: 4px;
 }
 
 @media (max-width: 768px) {
-  .banner-container {
+  .banner-carousel {
     height: 200px;
-    margin-bottom: 16px;
   }
-  
-  .banner-content {
-    padding: 20px;
-  }
-  
   .banner-title {
-    font-size: 24px;
-  }
-  
-  .banner-subtitle {
-    font-size: 14px;
+    font-size: 22px;
   }
 }
 </style>

@@ -112,10 +112,11 @@ const logout = () => {
 
 // 获取用户信息
 const getUserInfo = () => {
-  const user = localStorage.getItem('user');
-  if (user) {
-    userInfo.value = JSON.parse(user);
-  }
+  userInfo.value = {
+    username: localStorage.getItem('username') || '管理员',
+    role: localStorage.getItem('role') || 'admin',
+    nickname: localStorage.getItem('nickname') || '',
+  };
 };
 
 onMounted(() => {

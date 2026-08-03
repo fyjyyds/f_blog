@@ -37,8 +37,8 @@
           <div class="banner-info">
             <div class="info-item">
               <span class="label">链接：</span>
-              <a :href="banner.link_url" target="_blank" class="link-url">
-                {{ banner.link_url || '无链接' }}
+              <a :href="banner.link" target="_blank" class="link-url">
+                {{ banner.link || '无链接' }}
               </a>
             </div>
             
@@ -118,7 +118,7 @@
           <div class="form-group">
             <label>链接地址</label>
             <input 
-              v-model="formData.link_url" 
+              v-model="formData.link" 
               type="url" 
               class="form-input" 
               placeholder="请输入链接地址（可选）"
@@ -176,7 +176,7 @@ const formData = ref({
   title: '',
   description: '',
   image: '',
-  link_url: '',
+  link: '',
   sort_order: 0,
   status: 'active'
 });
@@ -296,7 +296,7 @@ const closeModal = () => {
     title: '',
     description: '',
     image: '',
-    link_url: '',
+    link: '',
     sort_order: 0,
     status: 'active'
   };

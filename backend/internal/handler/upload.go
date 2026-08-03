@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"f_blog/backend/internal/util"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -18,7 +19,6 @@ var allowedExt = map[string]bool{
 	".txt": true, ".md": true, ".py": true, ".js": true, ".ts": true,
 	".go": true, ".java": true, ".cpp": true, ".c": true,
 	".json": true, ".xml": true, ".csv": true,
-	// 新增常见办公文件类型
 	".doc": true, ".docx": true, ".pdf": true,
 	".ppt": true, ".pptx": true, ".xls": true, ".xlsx": true,
 }
@@ -46,6 +46,12 @@ func UploadFile(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "上传失败"})
 		return
 	}
-	url := "/static/upload/" + filename
-	c.JSON(http.StatusOK, gin.H{"url": url})
+	// 数据库存相对路径: upload/filename
+	relativePath := "upload/" + filename
+	// API 返回完整 URL: /static/upload/filename
+	fullURL := util.StaticURL(relativePath)
+	c.JSON(http.StatusOK, gin.H{
+		"url":      fullURL,
+		"relative": relativePath,
+	})
 }

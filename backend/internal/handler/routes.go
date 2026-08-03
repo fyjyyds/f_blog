@@ -43,7 +43,7 @@ func SetupRoutes(r *gin.Engine) {
 // setupPublicRoutes 设置公开路由
 func setupPublicRoutes(api *gin.RouterGroup) {
 	api.GET("/captcha", GetCaptcha)
-	api.POST("/auth/reg ister", Register)
+	api.POST("/auth/register", Register)
 	api.POST("/auth/login", Login)
 	api.GET("/banners", ListBanners)
 	api.GET("/categories", ListCategories)

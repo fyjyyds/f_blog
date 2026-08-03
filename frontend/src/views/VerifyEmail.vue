@@ -11,7 +11,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
+import request from '../api/request'
 
 const status = ref('')
 const route = useRoute()
@@ -24,7 +24,7 @@ onMounted(async () => {
     return
   }
   try {
-    await axios.get('/api/v1/activate', { params: { token } })
+    await request.get('/api/v1/activate', { params: { token } })
     status.value = 'success'
   } catch (e) {
     status.value = 'fail'
